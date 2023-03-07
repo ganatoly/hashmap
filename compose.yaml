@@ -1,0 +1,96 @@
+networks:
+  shared:
+
+volumes:
+  pgdb_data:
+  prometheus_data:
+  grafana_data:
+
+services:
+  # PostgreSQL
+  pgdb:
+    image: postgres
+    restart: unless-stopped
+    volumes:
+      - pgdb_data:/var/lib/postgresql/data/
+    environment:
+      - POSTGRES_USER=${POSTGRES_USER}
+      - POSTGRES_PASSWORD=${POSTGRES_PASSWORD}
+      - POSTGRES_DB=${POSTGRES_DB}
+    ports:
+      - 127.0.0.1:54322:5432
+    profiles:
+      - db
+      - development
+      - production
+    hostname: database
+    networks:
+      - shared
+  # HashMap service (dev - sync src & prod)
+  backend-development:
+    build:
+      context: .
+      dockerfile: Dockerfile.development
+    restart: unless-stopped
+    volumes:
+      - ./src:/app/src
+    environment:
+      - NODE_ENV=development
+      - POSTGRES_HOST=database
+      - POSTGRES_PORT=5432
+      #- POSTGRES_PORT=${POSTGRES_PORT:-5432}
+    hostname: backend
+    ports:
+      - 4500:4500
+    expose:
+      - 4500
+    profiles:
+      - development
+    networks:
+      - shared
+    depends_on:
+      - pgdb
+  backend-production:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    restart: unless-stopped
+    environment:
+      - NODE_ENV=production
+      - POSTGRES_HOST=database
+      - POSTGRES_PORT=5432
+    hostname: backend
+    ports:
+      - 4500:4500
+    expose:
+      - 4500
+    profiles:
+      - production
+    networks:
+      - shared
+    depends_on:
+      - pgdb
+  # Monitoring: Prometheus
+  prometheus:
+    image: prom/prometheus:v2.32.1
+    restart: unless-stopped
+    volumes:
+      - ./monitoring/prometheus:/etc/prometheus
+      - prometheus_data:/prometheus
+    command:
+      - '--config.file=/etc/prometheus/prometheus.yml'
+      - '--storage.tsdb.path=/prometheus'
+      - '--web.console.libraries=/etc/prometheus/console_libraries'
+      - '--web.console.templates=/etc/prometheus/consoles'
+      - '--storage.tsdb.retention.time=14d'
+      - '--web.enable-lifecycle'
+    hostname: prometheus
+    ports:
+      - 127.0.0.1:9090:9090
+    expose:
+      - 9090
+    profiles:
+      - development
+      - production
+    networks:
+      - shared

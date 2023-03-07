@@ -1,0 +1,26 @@
+// hero/hero.proto
+syntax = "proto3";
+
+import "google/protobuf/any.proto";
+
+package hashmap;
+
+service HashMapService {
+  rpc putEntry (PutHashMapDto) returns (HashMapDto) {}
+  rpc getEntry (GetHashMapDto) returns (HashMapDto) {}
+}
+
+message PutHashMapDto {
+  string key = 1;
+  google.protobuf.Any value = 2;
+  optional int32 ttl = 3;
+}
+
+message GetHashMapDto {
+  string key = 1;
+}
+
+message HashMapDto {
+  string key = 1;
+  google.protobuf.Any value = 2;
+}
