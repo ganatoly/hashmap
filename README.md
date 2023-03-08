@@ -19,7 +19,7 @@ HashMap microservice using NestJS and PostgeSQL
 Prom expressions:
 
 - hm_request_count (counter)
-- hm_response_ellapsed_time (histogram)
+- hm_response_elapsed_time (histogram)
 
 [App metrics endpoint: http://localhost:4500/metrics](http://localhost:4500/metrics)
 
@@ -63,12 +63,14 @@ $ npm run docker:prod
 
 ## Environment variables
 
-| Name                | Description                                  |
-| ------------------- | -------------------------------------------- |
-| `POSTGRES_HOST`     | pg database host (not use in docker compose) |
-| `POSTGRES_PORT`     | pg database port (defaults to 5432)          |
-| `POSTGRES_USER`     | pg database user                             |
-| `POSTGRES_PASSWORD` | pg database password                         |
-| `POSTGRES_DB`       | pg database name                             |
+| Name                | Description                                   |
+|---------------------|-----------------------------------------------|
+| `POSTGRES_HOST`     | pg database host (not use in docker compose)  |
+| `POSTGRES_PORT`     | pg database port (defaults to 5432)           |
+| `POSTGRES_USER`     | pg database user                              |
+| `POSTGRES_PASSWORD` | pg database password                          |
+| `POSTGRES_DB`       | pg database name                              |
+| `APP_PORT`          | port to run http server on (defaults to 4500) |
+| `GRPC_PORT`         | port to run gRPC server on (defaults to 5000) |
 
 Also, please, consider looking at `.env.sample`.

@@ -41,7 +41,7 @@ export class PutHashMapDto {
   @ApiPropertyOptional({
     name: 'ttl',
     type: Number,
-    example: '10',
+    example: 60,
     description: 'Expiration time in second',
   })
   @IsInt()

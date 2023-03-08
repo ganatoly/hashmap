@@ -14,17 +14,20 @@ export class LoggingInterceptor implements NestInterceptor {
 
   intercept(context: ExecutionContext, next: CallHandler): Observable<any> {
     let logTag = 'unknown';
+    let reqData = undefined;
     if (context.getType() === 'http') {
       const ctx = context.switchToHttp();
       const request = ctx.getRequest();
+      if (request.method === 'POST') reqData = request.body;
+      else if (request.method === 'GET') reqData = request.query;
       logTag = `HTTP[${request.method}: ${request.url}]`;
     } else if (context.getType() === 'rpc') {
       logTag = `RPC`;
-      // ToDo need research rpc context info
-      // const ctx = context.switchToRpc();
+      const ctx = context.switchToRpc();
+      reqData = ctx.getData();
     }
 
-    this.logger.debug(`${logTag}| invoke`);
+    this.logger.debug(`${logTag}| invoke, request: ${JSON.stringify(reqData)}`);
     const now = Date.now();
     return next
       .handle()

@@ -13,8 +13,8 @@ import { catchError, tap } from 'rxjs/operators';
 export class PromMetricsInterceptor implements NestInterceptor {
   constructor(
     @InjectMetric('hm_request_count') private metricReqCount: Counter<string>,
-    @InjectMetric('hm_response_ellapsed_time')
-    private metricEllTime: Histogram<string>,
+    @InjectMetric('hm_response_elapsed_time')
+    private metricElTime: Histogram<string>,
   ) {}
 
   intercept(context: ExecutionContext, next: CallHandler): Observable<any> {
@@ -28,12 +28,10 @@ export class PromMetricsInterceptor implements NestInterceptor {
       labels.method = request.method;
     } else if (transport === 'rpc') {
       labels.method = 'rpc';
-      // ToDo need research rpc context info
-      // const ctx = context.switchToRpc();
     }
 
     this.metricReqCount.inc(labels);
-    const ellTimeTimer = this.metricEllTime.startTimer(labels);
+    const ellTimeTimer = this.metricElTime.startTimer(labels);
 
     return next
       .handle()

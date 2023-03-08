@@ -1,7 +1,6 @@
-// hero/hero.proto
 syntax = "proto3";
 
-import "google/protobuf/any.proto";
+import "google/protobuf/struct.proto";
 
 package hashmap;
 
@@ -12,7 +11,7 @@ service HashMapService {
 
 message PutHashMapDto {
   string key = 1;
-  google.protobuf.Any value = 2;
+  google.protobuf.Struct value = 2;
   optional int32 ttl = 3;
 }
 
@@ -22,5 +21,5 @@ message GetHashMapDto {
 
 message HashMapDto {
   string key = 1;
-  google.protobuf.Any value = 2;
+  google.protobuf.Struct value = 2;
 }

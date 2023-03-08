@@ -12,8 +12,8 @@ const metricProviders = [
     labelNames: ['transport', 'endpoint', 'method'],
   }),
   makeHistogramProvider({
-    name: 'hm_response_ellapsed_time',
-    help: 'Ellapsed time',
+    name: 'hm_response_elapsed_time',
+    help: 'Elapsed time',
     labelNames: ['transport', 'endpoint', 'method'],
   }),
 ];

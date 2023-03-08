@@ -8,6 +8,10 @@ export class AppConfigService {
   get port(): number {
     return this.configService.get('app.appPort');
   }
+
+  get grpcPort(): number {
+    return this.configService.get('app.grpcPort');
+  }
   get isProduction(): boolean {
     return (
       (this.configService.get('app.nodeEnv') || '').toLowerCase() ===

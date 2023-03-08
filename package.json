@@ -18,6 +18,7 @@
     "test:cov": "jest --coverage",
     "test:debug": "node --inspect-brk -r tsconfig-paths/register -r ts-node/register node_modules/.bin/jest --runInBand",
     "test:e2e": "jest --config ./test/jest-e2e.json",
+    "docker:db": "docker compose --profile=db up --build",
     "docker:dev": "docker compose --profile=development up --build",
     "docker:prod": "docker compose --profile=production up --build"
   },
